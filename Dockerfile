@@ -1,21 +1,14 @@
-# Multi-stage build: First build the application
-FROM maven:3.8-openjdk-11 as builder
+# Use OpenJDK 11 as the base image
+FROM openjdk:11-jdk-slim
 
+# Set the working directory inside the container
 WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
 
-# Second stage: Run the application
-FROM tomcat:9.0-jdk11-openjdk
+# Copy the compiled JAR file into the container
+COPY target/JavaWeb3.jar /app/JavaWeb3.jar
 
-# Remove default Tomcat applications
-RUN rm -rf /usr/local/tomcat/webapps/*
-
-# Copy the WAR file from the builder stage
-COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
-
-# Expose port 8080
+# Expose port 8080 to the outside world
 EXPOSE 8080
 
-# Start Tomcat server
-CMD ["catalina.sh", "run"]
+# Command to run the application
+ENTRYPOINT ["java", "-jar", "JavaWeb3.jar"]
