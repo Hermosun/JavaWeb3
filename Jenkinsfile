@@ -2,14 +2,16 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'hermosun/javaweb3'
+        DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials'
+        DOCKER_IMAGE_NAME = 'hermosun/java-calculator' // Change to your Docker Hub username
+        DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
     stages {
         stage('Checkout') {
             steps {
                 echo 'Cloning the repository...'
-                git url: 'https://github.com/CeeyIT-Solutions/JavaWeb3.git', branch: 'main'
+                git url: 'https://github.com/Hermosun/JavaWeb3.git', branch: 'master'
             }
         }
 
